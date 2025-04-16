@@ -36,6 +36,8 @@ model Bike {
   // relation
   customer      Customer        @relation(fields: [customerId], references: [customerId])
   serviceRecord ServiceRecord[]
+
+  @@map("bikes")
 }
 
 // Service Record table
@@ -49,6 +51,8 @@ model ServiceRecord {
 
   // relation
   bike Bike @relation(fields: [bikeId], references: [bikeId])
+
+  @@map("serviceRecords")
 }
 
 enum Status {
