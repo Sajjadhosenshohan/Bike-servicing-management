@@ -1,26 +1,27 @@
+import { Bike } from "@prisma/client";
 import { prisma } from "../../helper/prisma";
 
-const createCustomer = async (payload: TCustomer) => {
-  const result = await prisma.customer.create({
+const addBike = async (payload: Bike) => {
+  const result = await prisma.bike.create({
     data: payload,
   });
   return result;
 };
 
 
-// const getAllCustomer = async () => {
-//   const result = await prisma.customer.findMany();
-//   return result;
-// };
+const getAllBikes = async () => {
+  const result = await prisma.bike.findMany();
+  return result;
+};
 
-// const getSingleCustomer = async (id:string) => {
-//   const result = await prisma.customer.findUniqueOrThrow({
-//     where: {
-//         customerId: id
-//     }
-//   });
-//   return result;
-// };
+const getSingleBike = async (id:string) => {
+  const result = await prisma.bike.findUniqueOrThrow({
+    where: {
+        bikeId: id
+    }
+  });
+  return result;
+};
 
 // const updateCustomerDetails = async (id:string,payload:Partial<TCustomer>) => {
 //   const result = await prisma.customer.update({
@@ -41,6 +42,8 @@ const createCustomer = async (payload: TCustomer) => {
 //   return result;
 // };
 
-export const CustomerServices = {
-  
+export const BikeServices = {
+    addBike,
+    getAllBikes,
+    getSingleBike
 };

@@ -1,7 +1,7 @@
+import { Customer } from "@prisma/client";
 import { prisma } from "../../helper/prisma";
-import { TCustomer } from "./customer.interface";
 
-const createCustomer = async (payload: TCustomer) => {
+const createCustomer = async (payload: Customer) => {
   const result = await prisma.customer.create({
     data: payload,
   });
