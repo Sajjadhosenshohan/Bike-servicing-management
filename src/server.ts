@@ -1,8 +1,15 @@
 import { Server } from "http"
-const port = 5000;
+import app from "./app";
+import config from "./app/config";
 
 const main = () => {
-    const server : Server = app.listen(port, ()=> {
-        console.log(`Server is listening on port ${port}`)
-    })
+    try {
+        app.listen(config.port, () => {
+          console.log(`Server running on port: ${config.port}`);
+        });
+      } catch (error) {
+        console.error('Error starting server:', error);
+      }
 }
+
+main();
