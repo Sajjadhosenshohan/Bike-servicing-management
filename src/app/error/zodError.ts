@@ -1,31 +1,22 @@
-import { ZodError, ZodIssue } from 'zod';
-import { TErrorMessage, TErrorResponse } from '../interfaces/error';
+import { ZodError } from "zod";
+import httpStatus from "http-status";
 
-export const handleZodValidationError = (error: ZodError): TErrorResponse => {
-  const statusCode = 400;
-  const message = 'Validation Error';
+interface SimplifiedZodError {
+  statusCode: number;
+  message: string;
+  error: Array<{ path: string; message: string }>;
+}
 
-  const capitalizeFirstLetter = (str: string) => {
-    return str.replace(/\b\w/g, (char) => char.toUpperCase());
-  };
-
-  const errorMessages: TErrorMessage = error.issues.map((issue: ZodIssue) => {
-    const path = issue.path.length > 0 ? issue.path[issue.path.length - 1] : '';
+export const handleZodError = (err: ZodError): SimplifiedZodError => {
+  const ZodError = err.issues.map((issue) => {
     return {
-      path: capitalizeFirstLetter(path as string),
-      message: capitalizeFirstLetter(issue.message),
+      path: issue.path.join(">>>"),
+      message: issue.message,
     };
   });
-
-  const errorMessage = errorMessages
-    .map((error) => `${error.path} ${error.message}`)
-    .join('. ');
-
   return {
-    statusCode,
-    errorMessage,
-    errorDetails: {
-      issues: errorMessages,
-    },
+    statusCode: httpStatus.BAD_REQUEST,
+    message: "Zod Validation error",
+    error: ZodError,
   };
 };

@@ -1,14 +1,11 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-export type TErrorMessage = {
-    path: string;
-    message: string;
-  }[];
-  
-  export type TErrorResponse = {
-    statusCode: number;
-    errorMessage?: string;
-    errorDetails: string | any;
-    error?: any;
-    stack?: string | any;
-  };
-  
+export type TErrorSources = {
+  path: string;
+  message: string;
+}[];
+export type TGenericErrorResponse = {
+  message: string;
+  statusCode: number;
+  error: TErrorSources;
+};
+
+// export type TErrorAs = { path: string | number; message: string };

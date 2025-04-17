@@ -1,9 +1,9 @@
 import express from "express";
 import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
-import { globalErrorHandler } from "./app/error/globalErrorHandler";
 import { notFoundRoute } from "./app/error/notFoundRoute";
 import router from "./app/router";
+import { globalErrorHandler } from "./app/error/globalErrorHandler";
 dotenv.config();
 const app = express();
 

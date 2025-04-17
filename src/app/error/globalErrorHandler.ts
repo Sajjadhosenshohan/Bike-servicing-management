@@ -1,54 +1,56 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { ErrorRequestHandler } from "express";
+import { ErrorRequestHandler, Request, Response, NextFunction } from "express";
 import { ZodError } from "zod";
-import { handleZodValidationError } from "./zodError";
-import httpStatus from "http-status";
+import { Prisma } from "@prisma/client";
+import { handleZodError } from "./zodError";
+import { handlePrismaError } from "./prismaErrorHandler";
+import AppError from "./AppError";
+
+const isDevelopment = process.env.NODE_ENV === "development";
 
 export const globalErrorHandler: ErrorRequestHandler = (
-  error,
-  req,
-  res,
-  next
+  error: unknown,
+  _req: Request,
+  res: Response,
+  _next: NextFunction
 ) => {
+  let statusCode = 500;
+  let message = "Something went wrong!";
+  let errorDetails: any = undefined;
+
   // Handle Zod Validation Error
   if (error instanceof ZodError) {
-    const result = handleZodValidationError(error);
-
-    return res.status(result.statusCode).json({
-      success: false,
-      message: result.errorMessage,
-      errorDetails: result.errorDetails,
-    });
+    const simplifiedError = handleZodError(error);
+    statusCode = simplifiedError.statusCode;
+    message = simplifiedError.message;
+    errorDetails = {
+      details: simplifiedError.error,
+    };
+  }
+  // Handle Prisma Errors
+  else if (error instanceof Prisma.PrismaClientKnownRequestError) {
+    const simplifiedError = handlePrismaError(error);
+    statusCode = simplifiedError.statusCode;
+    message = simplifiedError.message;
+    errorDetails = simplifiedError.error ? { details: simplifiedError.error } : undefined;
+  }
+  // Handle Custom AppError
+  else if (error instanceof AppError) {
+    console.log("app", error)
+    statusCode = error.statusCode;
+    message = error.message;
+  }
+  // Handle Generic Error
+  else if (error instanceof Error) {
+    message = error.message || message;
+    statusCode = (error as any).statusCode || statusCode;
   }
 
-  // Handle Duplicate Error
-  if (error.code === "P2002") {
-    let message;
-    const errorMessage = error.message;
-    const regex = /Unique constraint failed on the fields: \(`(.+?)`\)/;
-    const match = errorMessage.match(regex);
-
-    if (match) {
-      const constraintFields = match[1];
-      message = `Duplicate error constraint failed on fields: ${constraintFields}`;
-    } else {
-      message = "Failed to extract constraint details from error message";
-    }
-
-    return res.status(httpStatus.CONFLICT).json({
-      success: false,
-      message,
-      errorDetails: error,
-    });
-  }
-
-  // Handle other errors
-  const statusCode = error.statusCode || 500;
-  const message = error.message || "Something went wrong!";
-
-  return res.status(statusCode).json({
+  // Send response
+  res.status(statusCode).json({
     success: false,
+    status: statusCode,
     message,
-    errorDetails: error,
+    ...(errorDetails && { errorDetails }),
+    ...(isDevelopment && error instanceof Error && { stack: error.stack }),
   });
 };
