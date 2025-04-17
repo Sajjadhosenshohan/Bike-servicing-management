@@ -47,9 +47,24 @@ const updateCompleteServiceRecord = async (
   return result;
 };
 
+const getAllOver_dueServiceRecord = async () => {
+  const sevenDaysAgo = new Date();
+  sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7)
+
+  const result = await prisma.serviceRecord.findMany({
+    where: {
+      status: { in: ["pending", "in_progress"] },
+      serviceDate: {
+        lt: sevenDaysAgo
+      }
+    },
+  });
+  return result;
+};
 export const ServiceRecordServices = {
   createServiceRecord,
   getAllServiceRecord,
   getSingleServiceRecord,
   updateCompleteServiceRecord,
+  getAllOver_dueServiceRecord,
 };
