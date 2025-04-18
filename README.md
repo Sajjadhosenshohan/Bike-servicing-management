@@ -6,7 +6,7 @@ A backend API for managing bike servicing operations, supporting CRUD for custom
 
 ## 🌐 Live Backend
 
-*URL to be added post-deployment (e.g., Railway, Render)*
+*https://bike-servicing-management-chi.vercel.app*
 
 ## 🛠️ Tech Stack
 
