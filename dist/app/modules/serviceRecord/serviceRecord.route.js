@@ -1,0 +1,13 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const validationRequest_1 = require("./../../middlewares/validationRequest");
+const express_1 = require("express");
+const serviceRecord_controller_1 = require("./serviceRecord.controller");
+const serviceRecord_validation_1 = require("./serviceRecord.validation");
+const serviceRecordRoutes = (0, express_1.Router)();
+serviceRecordRoutes.post("/", (0, validationRequest_1.validationRequest)(serviceRecord_validation_1.ServiceRecordSchemaValidation.createServiceRecordSchemaValidation), serviceRecord_controller_1.ServiceRecordController.createServiceRecord);
+serviceRecordRoutes.get("/", serviceRecord_controller_1.ServiceRecordController.getAllServiceRecord);
+serviceRecordRoutes.get("/status", serviceRecord_controller_1.ServiceRecordController.getAllOver_dueServiceRecord);
+serviceRecordRoutes.get("/:id", serviceRecord_controller_1.ServiceRecordController.getSingleServiceRecord);
+serviceRecordRoutes.put("/:id", (0, validationRequest_1.validationRequest)(serviceRecord_validation_1.ServiceRecordSchemaValidation.updateServiceRecordSchemaValidation), serviceRecord_controller_1.ServiceRecordController.updateCompleteServiceRecord);
+exports.default = serviceRecordRoutes;

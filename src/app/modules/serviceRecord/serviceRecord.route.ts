@@ -11,6 +11,6 @@ serviceRecordRoutes.get("/", ServiceRecordController.getAllServiceRecord)
 serviceRecordRoutes.get("/status", ServiceRecordController.getAllOver_dueServiceRecord)
 
 serviceRecordRoutes.get("/:id", ServiceRecordController.getSingleServiceRecord)
-serviceRecordRoutes.put("/:id",validationRequest(ServiceRecordSchemaValidation.updateServiceRecordSchemaValidation), ServiceRecordController.updateCompleteServiceRecord)
+serviceRecordRoutes.put("/:id/complete",validationRequest(ServiceRecordSchemaValidation.updateServiceRecordSchemaValidation), ServiceRecordController.updateCompleteServiceRecord)
 
 export default serviceRecordRoutes;

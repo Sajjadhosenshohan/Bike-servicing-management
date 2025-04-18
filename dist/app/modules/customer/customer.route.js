@@ -1,0 +1,13 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const validationRequest_1 = require("./../../middlewares/validationRequest");
+const express_1 = require("express");
+const customer_controller_1 = require("./customer.controller");
+const customer_validation_1 = require("./customer.validation");
+const customerRoutes = (0, express_1.Router)();
+customerRoutes.post("/", (0, validationRequest_1.validationRequest)(customer_validation_1.CustomerSchemaValidation.createCustomerRequestSchemaValidation), customer_controller_1.CustomerController.createCustomer);
+customerRoutes.get("/", customer_controller_1.CustomerController.getAllCustomer);
+customerRoutes.get("/:id", customer_controller_1.CustomerController.getSingleCustomer);
+customerRoutes.put("/:id", (0, validationRequest_1.validationRequest)(customer_validation_1.CustomerSchemaValidation.updateCustomerRequestSchemaValidation), customer_controller_1.CustomerController.updateCustomerDetails);
+customerRoutes.delete("/:id", customer_controller_1.CustomerController.deleteCustomer);
+exports.default = customerRoutes;

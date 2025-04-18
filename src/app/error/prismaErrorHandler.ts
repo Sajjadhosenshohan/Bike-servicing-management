@@ -4,7 +4,7 @@ import httpStatus from "http-status";
 interface SimplifiedPrismaError {
   statusCode: number;
   message: string;
-  error?: any; // Optional details
+  error?: any;
 }
 
 export const handlePrismaError = (

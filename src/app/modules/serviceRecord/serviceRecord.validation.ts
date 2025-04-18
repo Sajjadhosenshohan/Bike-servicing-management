@@ -3,7 +3,7 @@
 import { z } from "zod";
 
 // Enum for status
-const statusEnum = z.enum(["pending", "in-progress", "done"]);
+const statusEnum = z.enum(["pending", "in_progress", "done"]);
 
 // Create Schema
 export const createServiceRecordSchemaValidation = z.object({

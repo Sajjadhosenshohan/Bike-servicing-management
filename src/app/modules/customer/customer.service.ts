@@ -45,10 +45,20 @@ const updateCustomerDetails = async (
   return result;
 };
 
-const deleteCustomer = async (id: string) => {
+const deleteCustomer = async (customerId: string) => {
+  const isExist = await prisma.customer.findUnique({
+    where: {
+      customerId,
+    },
+  });
+
+  if (!isExist) {
+    throw new Error("Customer Not Found.");
+  }
+
   const result = await prisma.customer.delete({
     where: {
-      customerId: id,
+      customerId,
     },
   });
   return result;

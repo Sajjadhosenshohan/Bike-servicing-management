@@ -12,6 +12,7 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+  // directUrl = env("DIRECT_URL")
 }
 
 // Customer table
@@ -28,13 +29,14 @@ model Customer {
 
 // Bike Table
 model Bike {
-  bikeId        String          @id @default(uuid())
-  brand         String
-  model         String
-  year          Int
-  customerId    String
+  bikeId     String   @id @default(uuid())
+  brand      String
+  model      String
+  year       Int
+  customerId String
   // relation
-  customer      Customer        @relation(fields: [customerId], references: [customerId])
+  customer   Customer @relation(fields: [customerId], references: [customerId], onDelete: Cascade)
+
   serviceRecord ServiceRecord[]
 
   @@map("bikes")
@@ -50,7 +52,7 @@ model ServiceRecord {
   status         Status
 
   // relation
-  bike Bike @relation(fields: [bikeId], references: [bikeId])
+  bike Bike @relation(fields: [bikeId], references: [bikeId], onDelete: Cascade)
 
   @@map("serviceRecords")
 }
